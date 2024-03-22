@@ -1,0 +1,21 @@
+name: Call API on Pull Request Creation
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  call_api:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get branch name
+        id: branch_name
+        run: echo "::set-output name=branch::$(echo ${GITHUB_REF#refs/heads/})"
+#E7E18085-305E-4B92-8266-EC43E724038C
+      - name: Make API call
+        run: |
+          curl -X POST -H "Content-Type: application/json" -h {"Token":"E7E18085-305E-4B92-8266-EC43E724038C"} -d '{"branch_name": "${{ steps.branch_name.outputs.branch }}"}' cdn.grade.com/api/composer/deploy
